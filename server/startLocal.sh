@@ -1,0 +1,19 @@
+export AWS_PROFIE=dev
+export baseProtectedpath="/ait"
+export port=8082
+export host="0.0.0.0"
+export PROXY_TARGET="${PROXY_TARGET:=https://service.dev.curativeai.ai/cagent/api}"
+#export PROXY_TARGET="http://localhost:5000"
+export APP_TARGET="http://localhost:4000" # should be http:/localhost:8081 for non native
+export use_local=false
+export test_upn=mboyanov@curativeai.com
+export auth_tenant=mboyanov@curativeai.com
+export use_auth_override=true
+export test_tid=test_demo
+export REACT_APP_TARGET=${APP_TARGET}
+export REACT_APP_PROXY_TARGET=${PROXY_TARGET}
+export REST_FUNCTION_KEY=${REST_FUNCTION_KEY:=TBD}
+export REACT_APP_REST_FUNCTION_KEY=${REST_FUNCTION_KEY}
+export REACT_APP_HOST=$host
+export REACT_APP_PORT=$port
+node server3.js
