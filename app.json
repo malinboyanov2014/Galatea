@@ -40,12 +40,6 @@
             "backgroundColor": "#000000"
           }
         }
-      ],
-      [
-        "react-native-msal",
-        {
-          "androidPackageSignatureHash": "Xo8WBi6jzSxKDVR4drqm84yr9iU="
-        }
       ]
     ],
     "experiments": {

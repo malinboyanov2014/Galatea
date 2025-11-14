@@ -1,6 +1,6 @@
 export AWS_PROFIE=dev
 export baseProtectedpath="/ait"
-export port=8082
+export port=8080
 export host="0.0.0.0"
 export PROXY_TARGET="${PROXY_TARGET:=https://service.dev.curativeai.ai/cagent/api}"
 #export PROXY_TARGET="http://localhost:5000"
