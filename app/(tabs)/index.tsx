@@ -2,7 +2,12 @@ import { Text } from "react-native";
 
 export default function HomeScreen() {
   const data = fetch(
-    "https://http://localhost:8082/api/worker/mboyanov@curativeai.com/feature_access",
+    "http://localhost:8080/api/worker/mboyanov@curativeai.com/feature_access",
+    {
+      headers: {
+        "x-cai-as-user-id": "mboyanov@curativeai.com",
+      },
+    },
   );
   data.then(
     (x) => console.log(x),
