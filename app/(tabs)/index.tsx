@@ -1,4 +1,5 @@
-import { Text } from "react-native";
+import { Text, View } from "react-native";
+import { Button } from "react-native-paper";
 
 export default function HomeScreen() {
   const data = fetch(
@@ -13,5 +14,16 @@ export default function HomeScreen() {
     (x) => console.log(x),
     (e) => console.log(e),
   );
-  return <Text>Hello</Text>;
+  return (
+    <View style={{ margin: 8 }}>
+      <Text>Hello</Text>
+      <Button
+        icon="camera"
+        mode="contained"
+        onPress={() => console.log("Pressed")}
+      >
+        Press me
+      </Button>
+    </View>
+  );
 }
