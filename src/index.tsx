@@ -1,5 +1,6 @@
 import { Text, View } from "react-native";
 import { Button } from "react-native-paper";
+import GButton from "./common/GButton";
 
 export const Home = () => {
   // const data = fetch(
@@ -17,7 +18,10 @@ export const Home = () => {
 
   return (
     <View style={{ margin: 8 }}>
-      <Text>Hello</Text>
+      <Text className="text-lg font-bold text-red-800">Hello</Text>
+      <GButton mode="outlined" onPress={() => console.log("Aha")}>
+        Aha
+      </GButton>
       <Button
         icon="camera"
         mode="contained"
