@@ -1,6 +1,7 @@
 import React, { forwardRef, memo } from "react";
-import { Switch } from "react-native-paper";
+import { Switch, Text } from "react-native-paper";
 import { cssInterop } from "nativewind";
+import { View } from "react-native";
 
 cssInterop(Switch, {
   className: {
@@ -12,13 +13,19 @@ export type GSwitchBaseProps = React.ComponentProps<typeof Switch>;
 
 export interface GSwitchProps extends GSwitchBaseProps {
   className?: string;
+  label?: string;
 }
 
 type SwitchRef = React.ComponentRef<typeof Switch>;
 
 const GSwitch = forwardRef<SwitchRef, GSwitchProps>(
-  ({ className, style, ...rest }, ref) => {
-    return <Switch ref={ref} className={className} style={style} {...rest} />;
+  ({ className, style, label, ...rest }, ref) => {
+    return (
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <Switch ref={ref} className={className} style={style} {...rest} />
+        {label && <Text style={{ marginLeft: 8 }}>{label}</Text>}
+      </View>
+    );
   },
 );
 

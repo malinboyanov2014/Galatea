@@ -86,7 +86,11 @@ export const Home = () => {
         {/* GSwitch Card */}
         <GCard className="m-2 p-4 flex-1 min-w-[30%]">
           <GText className="text-lg font-bold mb-2">GSwitch</GText>
-          <GSwitch value={switchValue} onValueChange={setSwitchValue} />
+          <GSwitch
+            value={switchValue}
+            onValueChange={setSwitchValue}
+            label="Turn it ON"
+          />
           <GText className="mt-2">Switch is {switchValue ? "ON" : "OFF"}</GText>
         </GCard>
 
@@ -96,6 +100,7 @@ export const Home = () => {
           <GCheckbox
             status={checkboxValue ? "checked" : "unchecked"}
             onPress={() => setCheckboxValue(!checkboxValue)}
+            label="Optional label"
           />
           <GText className="mt-2">
             Checkbox is {checkboxValue ? "checked" : "unchecked"}
@@ -109,15 +114,15 @@ export const Home = () => {
             value="option1"
             status={radioValue === "option1" ? "checked" : "unchecked"}
             onPress={() => setRadioValue("option1")}
+            label="Option 1"
           />
-          <GText>Option 1</GText>
           <GRadioButton
             value="option2"
             status={radioValue === "option2" ? "checked" : "unchecked"}
             onPress={() => setRadioValue("option2")}
             className="mt-2"
+            label="Option 2"
           />
-          <GText>Option 2</GText>
         </GCard>
 
         {/* GIconButton & GIcon Card */}
