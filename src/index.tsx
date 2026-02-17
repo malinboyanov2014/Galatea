@@ -30,93 +30,108 @@ export const Home = () => {
       </View>
 
       <View className="flex-row flex-wrap p-2">
-      {/* GButton Card */}
-      <GCard className="m-2 p-4 flex-1 min-w-[30%]">
-        <GText className="text-lg font-bold mb-2">GButton</GText>
-        <GButton mode="contained" onPress={() => console.log("Pressed")}>
-          Contained Button
-        </GButton>
-        <GButton mode="outlined" onPress={() => console.log("Pressed")} className="mt-2">
-          Outlined Button
-        </GButton>
-        <GButton mode="text" onPress={() => console.log("Pressed")} className="mt-2">
-          GText Button
-        </GButton>
-      </GCard>
+        {/* GButton Card */}
+        <GCard className="m-2 p-4 flex-1 min-w-[30%]">
+          <GText className="text-lg font-bold mb-2">GButton</GText>
+          <GButton mode="contained" onPress={() => console.log("Pressed")}>
+            Contained Button
+          </GButton>
+          <GButton
+            mode="outlined"
+            onPress={() => console.log("Pressed")}
+            className="mt-2"
+          >
+            Outlined Button
+          </GButton>
+          <GButton
+            mode="text"
+            onPress={() => console.log("Pressed")}
+            className="mt-2"
+          >
+            GText Button
+          </GButton>
+        </GCard>
 
-      {/* GGTextInput Card */}
-      <GCard className="m-2 p-4 flex-1 min-w-[30%]">
-        <GText className="text-lg font-bold mb-2">GGTextInput</GText>
-        <GTextInput
-          label="Enter text"
-          value={textInput}
-          onChangeText={setGTextInput}
-          mode="outlined"
-          className="mb-2"
-        />
-        <GHelperText type="info">This is a helper text</GHelperText>
-      </GCard>
-
-      {/* GSearchbar Card */}
-      <GCard className="m-2 p-4 flex-1 min-w-[30%]">
-        <GText className="text-lg font-bold mb-2">GSearchbar</GText>
-        <GSearchbar
-          placeholder="Search"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-      </GCard>
-
-      {/* GSwitch Card */}
-      <GCard className="m-2 p-4 flex-1 min-w-[30%]">
-        <GText className="text-lg font-bold mb-2">GSwitch</GText>
-        <GSwitch
-          value={switchValue}
-          onValueChange={setSwitchValue}
-        />
-        <GText className="mt-2">Switch is {switchValue ? "ON" : "OFF"}</GText>
-      </GCard>
-
-      {/* GCheckbox Card */}
-      <GCard className="m-2 p-4 flex-1 min-w-[30%]">
-        <GText className="text-lg font-bold mb-2">GCheckbox</GText>
-        <GCheckbox
-          status={checkboxValue ? "checked" : "unchecked"}
-          onPress={() => setCheckboxValue(!checkboxValue)}
-        />
-        <GText className="mt-2">Checkbox is {checkboxValue ? "checked" : "unchecked"}</GText>
-      </GCard>
-
-      {/* GRadioButton Card */}
-      <GCard className="m-2 p-4 flex-1 min-w-[30%]">
-        <GText className="text-lg font-bold mb-2">GRadioButton</GText>
-        <GRadioButton
-          value="option1"
-          status={radioValue === "option1" ? "checked" : "unchecked"}
-          onPress={() => setRadioValue("option1")}
-        />
-        <GText>Option 1</GText>
-        <GRadioButton
-          value="option2"
-          status={radioValue === "option2" ? "checked" : "unchecked"}
-          onPress={() => setRadioValue("option2")}
-          className="mt-2"
-        />
-        <GText>Option 2</GText>
-      </GCard>
-
-      {/* GIconButton & GIcon Card */}
-      <GCard className="m-2 p-4 flex-1 min-w-[30%]">
-        <GText className="text-lg font-bold mb-2">GIconButton & GIcon</GText>
-        <View className="flex-row">
-          <GIconButton
-            icon="camera"
-            size={24}
-            onPress={() => console.log("Icon button pressed")}
+        {/* GGTextInput Card */}
+        <GCard className="m-2 p-4 flex-1 min-w-[30%]">
+          <GText className="text-lg font-bold mb-2">GTextInput</GText>
+          <GTextInput
+            label="Enter text"
+            value={textInput}
+            onChangeText={setGTextInput}
+            mode="outlined"
+            className="mb-2"
           />
-          <GIcon source="heart" size={24} className="mt-2" />
-        </View>
-      </GCard>
+          <GTextInput
+            label="Readonly"
+            value={"Readonly value"}
+            onChangeText={setGTextInput}
+            mode="outlined"
+            className="mb-2"
+            readOnly={true}
+          />
+          <GHelperText type="info">This is a helper text</GHelperText>
+        </GCard>
+
+        {/* GSearchbar Card */}
+        <GCard className="m-2 p-4 flex-1 min-w-[30%]">
+          <GText className="text-lg font-bold mb-2">GSearchbar</GText>
+          <GSearchbar
+            placeholder="Search"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+        </GCard>
+
+        {/* GSwitch Card */}
+        <GCard className="m-2 p-4 flex-1 min-w-[30%]">
+          <GText className="text-lg font-bold mb-2">GSwitch</GText>
+          <GSwitch value={switchValue} onValueChange={setSwitchValue} />
+          <GText className="mt-2">Switch is {switchValue ? "ON" : "OFF"}</GText>
+        </GCard>
+
+        {/* GCheckbox Card */}
+        <GCard className="m-2 p-4 flex-1 min-w-[30%]">
+          <GText className="text-lg font-bold mb-2">GCheckbox</GText>
+          <GCheckbox
+            status={checkboxValue ? "checked" : "unchecked"}
+            onPress={() => setCheckboxValue(!checkboxValue)}
+          />
+          <GText className="mt-2">
+            Checkbox is {checkboxValue ? "checked" : "unchecked"}
+          </GText>
+        </GCard>
+
+        {/* GRadioButton Card */}
+        <GCard className="m-2 p-4 flex-1 min-w-[30%]">
+          <GText className="text-lg font-bold mb-2">GRadioButton</GText>
+          <GRadioButton
+            value="option1"
+            status={radioValue === "option1" ? "checked" : "unchecked"}
+            onPress={() => setRadioValue("option1")}
+          />
+          <GText>Option 1</GText>
+          <GRadioButton
+            value="option2"
+            status={radioValue === "option2" ? "checked" : "unchecked"}
+            onPress={() => setRadioValue("option2")}
+            className="mt-2"
+          />
+          <GText>Option 2</GText>
+        </GCard>
+
+        {/* GIconButton & GIcon Card */}
+        <GCard className="m-2 p-4 flex-1 min-w-[30%]">
+          <GText className="text-lg font-bold mb-2">GIconButton & GIcon</GText>
+          <View className="flex-row">
+            <GIconButton
+              icon="camera"
+              size={24}
+              onPress={() => console.log("Icon button pressed")}
+            />
+            <GIcon source="heart" size={24} className="mt-2" />
+          </View>
+        </GCard>
       </View>
     </ScrollView>
   );

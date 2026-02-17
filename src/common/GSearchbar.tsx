@@ -1,12 +1,6 @@
 import React, { forwardRef, memo } from "react";
-import { Searchbar } from "react-native-paper";
-import { cssInterop } from "nativewind";
-
-cssInterop(Searchbar, {
-  className: {
-    target: "style",
-  },
-});
+import { View } from "react-native";
+import { Searchbar, useTheme } from "react-native-paper";
 
 export type GSearchbarBaseProps = React.ComponentProps<typeof Searchbar>;
 
@@ -18,7 +12,29 @@ type SearchbarRef = React.ComponentRef<typeof Searchbar>;
 
 const GSearchbar = forwardRef<SearchbarRef, GSearchbarProps>(
   ({ className, style, ...rest }, ref) => {
-    return <Searchbar ref={ref} className={className} style={style} {...rest} />;
+    const theme = useTheme();
+
+    const searchbarElement = (
+      <Searchbar
+        ref={ref}
+        style={[
+          {
+            backgroundColor: 'transparent',
+            borderWidth: 1,
+            borderColor: theme.colors.outline,
+          },
+          style,
+        ]}
+        inputStyle={{ backgroundColor: 'transparent' }}
+        {...rest}
+      />
+    );
+
+    if (className) {
+      return <View className={className}>{searchbarElement}</View>;
+    }
+
+    return searchbarElement;
   },
 );
 
