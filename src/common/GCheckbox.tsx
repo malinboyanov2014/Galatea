@@ -1,6 +1,6 @@
 import React, { memo } from "react";
-import { View, Text } from "react-native";
-import { Checkbox } from "react-native-paper";
+import { View } from "react-native";
+import { Checkbox, Text } from "react-native-paper";
 
 export type GCheckboxBaseProps = React.ComponentProps<typeof Checkbox>;
 
@@ -11,7 +11,10 @@ export interface GCheckboxProps extends GCheckboxBaseProps {
 
 const GCheckbox = ({ className, label, ...rest }: GCheckboxProps) => {
   return (
-    <View className={className} style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <View
+      className={className}
+      style={{ flexDirection: "row", alignItems: "center" }}
+    >
       <Checkbox {...rest} />
       {label && <Text>{label}</Text>}
     </View>
