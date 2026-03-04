@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Dimensions } from "react-native";
-import { useTheme } from "react-native-paper";
 import { GripHorizontal } from "lucide-react-native";
+import React from "react";
+import { Dimensions, View } from "react-native";
+import { useTheme } from "react-native-paper";
 import { useSplitView } from "./hooks";
 
 const screenHeight = Dimensions.get("window").height;
@@ -36,11 +36,11 @@ export default function SplitView({
       >
         <View
           className="flex-1 mx-2 my-2 overflow-hidden"
-          style={{
-            borderWidth: 1,
-            borderColor: theme.colors.outline,
-            borderRadius: 12,
-          }}
+        // style={{
+        //   borderWidth: 1,
+        //   borderColor: theme.colors.outline,
+        //   borderRadius: 12,
+        // }}
         >
           <View style={{ height: topHeight }} className="p-2">
             {topComponent}

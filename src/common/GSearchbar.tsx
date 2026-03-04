@@ -1,3 +1,4 @@
+import { LinearGradient } from "expo-linear-gradient";
 import React, { forwardRef, memo } from "react";
 import { View } from "react-native";
 import { Searchbar, useTheme } from "react-native-paper";
@@ -14,27 +15,35 @@ const GSearchbar = forwardRef<SearchbarRef, GSearchbarProps>(
   ({ className, style, ...rest }, ref) => {
     const theme = useTheme();
 
-    const searchbarElement = (
-      <Searchbar
-        ref={ref}
-        style={[
-          {
-            backgroundColor: 'transparent',
-            borderWidth: 1,
-            borderColor: theme.colors.outline,
-          },
-          style,
-        ]}
-        inputStyle={{ backgroundColor: 'transparent' }}
-        {...rest}
-      />
+    const borderRadius = theme.roundness * 6;
+
+    const searchbar = (
+      <LinearGradient
+        colors={[theme.colors.primary, theme.colors.secondary]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={{ borderRadius, padding: 2 }}
+      >
+        <Searchbar
+          ref={ref}
+          style={[
+            {
+              backgroundColor: theme.colors.surface,
+              borderRadius: borderRadius - 2,
+            },
+            style,
+          ]}
+          inputStyle={{ backgroundColor: "transparent" }}
+          {...rest}
+        />
+      </LinearGradient>
     );
 
     if (className) {
-      return <View className={className}>{searchbarElement}</View>;
+      return <View className={className}>{searchbar}</View>;
     }
 
-    return searchbarElement;
+    return searchbar;
   },
 );
 
