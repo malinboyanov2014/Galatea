@@ -3,7 +3,7 @@ import React from "react";
 import { View } from "react-native";
 import GScrollView from "../../../common/GScrollView";
 import GSearchbar from "../../../common/GSearchbar";
-import DrawerPanel from "../../DrawerPanel";
+import DrawerPanel, { STRIP_WIDTH } from "../../DrawerPanel";
 
 interface ChatProps {
   children?: React.ReactNode;
@@ -22,13 +22,15 @@ export default function Chat({
 }: ChatProps) {
 
   return (
-    <View style={{ flex: 1, flexDirection: "row" }}>
+    <GView style={{ flex: 1, flexDirection: "row" }}>
       <DrawerPanel>{drawerContent}</DrawerPanel>
 
       <View style={{ flex: 1 }}>
         <GScrollView className="flex-1 p-2">{children}</GScrollView>
 
-        <GView className="px-2 pb-2 pt-1">
+        <GView className="px-2 pb-2 pt-1" style={{
+          marginRight: STRIP_WIDTH
+        }}>
           <GSearchbar
             placeholder={searchPlaceholder}
             value={searchQuery}
@@ -36,6 +38,6 @@ export default function Chat({
           />
         </GView>
       </View>
-    </View>
+    </GView>
   );
 }

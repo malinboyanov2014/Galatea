@@ -5,7 +5,7 @@ import { Drawer, useTheme } from "react-native-paper";
 import { useDrawerResize } from "./hooks";
 
 const DRAWER_WIDTH = 280;
-const STRIP_WIDTH = 52;
+export const STRIP_WIDTH = 52;
 const HANDLE_WIDTH = 16;
 
 interface DrawerPanelProps {

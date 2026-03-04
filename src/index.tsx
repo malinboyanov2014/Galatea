@@ -13,7 +13,7 @@ import GSwitch from "./common/GSwitch";
 import GText from "./common/GText";
 import GTextInput from "./common/GTextInput";
 import GView from "./common/GView";
-import { useTheme } from "./components/PaperTheme";
+import Header from "./components/Header";
 
 export const Home = () => {
   const [switchValue, setSwitchValue] = useState(false);
@@ -21,15 +21,10 @@ export const Home = () => {
   const [radioValue, setRadioValue] = useState("option1");
   const [textInput, setGTextInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const { isDark, toggleTheme } = useTheme();
-  const theme = useTheme();
 
   return (
     <GScrollView className="flex-1">
-      <GView className="flex-row items-center justify-between p-4" >
-        <GText className="text-lg font-bold">Mode</GText>
-        <GSwitch value={isDark} onValueChange={toggleTheme} />
-      </GView>
+      <Header />
 
       <View className="flex-row flex-wrap p-2">
         <GCard className="m-1 p-4 flex-1 min-w-[30%]">
