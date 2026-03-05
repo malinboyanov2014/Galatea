@@ -1,7 +1,6 @@
 import GView from "@/src/common/GView";
 import React from "react";
 import { View } from "react-native";
-import GScrollView from "../../../common/GScrollView";
 import GSearchbar from "../../../common/GSearchbar";
 import DrawerPanel, { STRIP_WIDTH } from "../../DrawerPanel";
 
@@ -26,7 +25,7 @@ export default function Chat({
       <DrawerPanel>{drawerContent}</DrawerPanel>
 
       <View style={{ flex: 1 }}>
-        <GScrollView className="flex-1 p-2">{children}</GScrollView>
+        <View style={{ flex: 1 }}>{children}</View>
 
         <GView className="px-2 pb-2 pt-1" style={{
           marginRight: STRIP_WIDTH
