@@ -49,8 +49,8 @@ export default function DrawerPanel({
           overflow: "hidden",
           backgroundColor: theme.colors.surface,
           elevation: 4,
-          borderRightWidth: open ? 1 : 0,
-          borderRightColor: theme.colors.outline,
+          // borderRightWidth: open ? 1 : 0,
+          // borderRightColor: theme.colors.outline,
         }}
       >
         <View style={{ width: drawerWidth }}>
