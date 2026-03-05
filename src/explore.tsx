@@ -1,7 +1,7 @@
-import { useSearch } from "@/api/query";
 import { View } from "react-native";
 import { STRIP_WIDTH } from "./components/DrawerPanel";
 import Header from "./components/Header";
+import useComponent from "./components/Hooks/useComponent";
 import Chat from "./components/Layout/Chat";
 import { TableList } from "./components/List";
 import Messages from "./components/Messages";
@@ -12,30 +12,46 @@ interface Conversation {
     preview: string;
 }
 
-const conversations: Conversation[] = [
-    { id: "1", name: "Alice", preview: "Hey, how are you?" },
-    { id: "2", name: "Bob", preview: "Can we reschedule?" },
-    { id: "3", name: "Support", preview: "Your ticket is open." },
-    { id: "4", name: "Team", preview: "Meeting at 3pm." },
-];
+const drawerContent = () => {
+    const conversations: Conversation[] = [
+        { id: "1", name: "Alice", preview: "Hey, how are you?" },
+        { id: "2", name: "Bob", preview: "Can we reschedule?" },
+        { id: "3", name: "Support", preview: "Your ticket is open." },
+        { id: "4", name: "Team", preview: "Meeting at 3pm." },
+    ];
 
-const drawerContent = (
-    <TableList<Conversation>
-        columns={[
-            { key: "name", title: "Name", flex: 1 },
-            { key: "preview", title: "Preview", flex: 2 },
-        ]}
-        data={conversations}
-    />
-);
+    const { Component } = useComponent({
+        i: 'reporting_bar_rcm_report',
+        config: {
+            data: 'report_data',
+            type: 'report_type',
+            schema: 'schema',
+            meta: {
+                count: 'row_count',
+                title: 'report_name',
+            },
+        }
+    })
+
+    return (
+        <>
+            <Component />
+            <TableList<Conversation>
+                columns={[
+                    { key: "name", title: "Name", flex: 1 },
+                    { key: "preview", title: "Preview", flex: 2 },
+                ]}
+                data={conversations}
+            />
+        </>
+    )
+};
 
 export const Explore = () => {
-    const { data } = useSearch({ i: 'reporting_bar_rcm_report' });
-    console.log({ data })
     return (
         <View className="flex-1">
             <Header />
-            <Chat drawerContent={drawerContent}>
+            <Chat drawerContent={drawerContent()}>
                 <Messages
                     messages={[
                         { id: "1", content: "Hi", sender: "user" },
