@@ -1,3 +1,4 @@
+import { useSearch } from "@/api/query";
 import { View } from "react-native";
 import { STRIP_WIDTH } from "./components/DrawerPanel";
 import Header from "./components/Header";
@@ -29,6 +30,8 @@ const drawerContent = (
 );
 
 export const Explore = () => {
+    const { data } = useSearch({ i: 'reporting_bar_rcm_report' });
+    console.log({ data })
     return (
         <View className="flex-1">
             <Header />

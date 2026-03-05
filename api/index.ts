@@ -1,3 +1,4 @@
+import { deepParseJson } from '@/src/utils';
 import { useQuery } from '@tanstack/react-query';
 import { axiosClient } from './axiosCient';
 
@@ -15,6 +16,6 @@ export function useApi({ url, params, enabled, method = 'get', body }: any) {
             return data;
         },
         enabled,
-        select: (result) => result?.data,
+        select: (result) => deepParseJson(result?.data?.[0]),
     });
 }
