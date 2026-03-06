@@ -12,8 +12,8 @@ import GSearchbar from "./common/GSearchbar";
 import GSwitch from "./common/GSwitch";
 import GText from "./common/GText";
 import GTextInput from "./common/GTextInput";
-import GView from "./common/GView";
 import Header from "./components/Header";
+import MatrixLoadingIndicator from "./components/MatrixLoadingIndicator";
 
 export const Home = () => {
   const [switchValue, setSwitchValue] = useState(false);
@@ -130,6 +130,9 @@ export const Home = () => {
             />
             <GIcon source="heart" size={24} className="mt-2" />
           </View>
+        </GCard>
+        <GCard className="m-1 p-4 flex-1 min-w-[30%]">
+          <MatrixLoadingIndicator height={100} />
         </GCard>
       </View>
     </GScrollView>
