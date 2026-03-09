@@ -26,5 +26,5 @@ export function createComponent(input: FactoryInput): FactoryOutput {
 
 export default createComponent;
 
-registerAdapter('bar', listAdapter);
+registerAdapter('list', listAdapter);
 

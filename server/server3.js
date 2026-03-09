@@ -3,14 +3,14 @@ import { DefaultAzureCredential } from "@azure/identity";
 import { SecretClient } from "@azure/keyvault-secrets";
 import { ConfidentialClientApplication } from "@azure/msal-node";
 import dayjs from "dayjs";
-import pinoHttp from "pino-http";
-import pino from "pino";
 import express from "express";
+import pino from "pino";
+import pinoHttp from "pino-http";
 
+import { createProxyMiddleware, fixRequestBody } from "http-proxy-middleware";
 import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
-import { createProxyMiddleware, fixRequestBody } from "http-proxy-middleware";
 
 const logger = pino({
   timestamp: () => `,"time":"${dayjs().format("YYYY-MM-DD HH:mm:ss.SSS Z")}"`,
@@ -153,6 +153,16 @@ const decodeMsalToken = (token) => {
   }
 };
 
+// Response adaptors keyed by the `i` query param for /api/search/item
+const responseAdaptors = {
+  reporting_bar_rcm_report: (data) => {
+    if (data?.data?.[0]) {
+      data.data[0].report_type = 'list';
+    }
+    return data;
+  },
+};
+
 // Proxy backend API calls
 const apiProxy = createProxyMiddleware({
   target: process.env.REACT_APP_PROXY_TARGET,
@@ -184,6 +194,7 @@ const apiProxy = createProxyMiddleware({
     logger.info(`[PATH REWRITE] No rules matched for path: ${path}`);
     return path; // Return original path unchanged
   },
+  selfHandleResponse: true,
   logLevel: "debug",
   on: {
     proxyReq: (proxyReq, req, res) => {
@@ -212,8 +223,38 @@ const apiProxy = createProxyMiddleware({
       }
 
       proxyReq.setHeader("Authorization", `Bearer ${req.accessToken}`);
+      proxyReq.setHeader("Accept-Encoding", "identity");
       logger.info("x-functions-key set");
       fixRequestBody(proxyReq, req, res);
+    },
+    proxyRes: (proxyRes, req, res) => {
+      const url = new URL(req.url, 'http://localhost');
+      const iParam = url.searchParams.get('i');
+      const adaptor = iParam && url.pathname.endsWith('/search/item') && responseAdaptors[iParam];
+
+      const chunks = [];
+      proxyRes.on('data', (chunk) => chunks.push(chunk));
+      proxyRes.on('end', () => {
+        const rawBody = Buffer.concat(chunks);
+        if (!adaptor) {
+          res.writeHead(proxyRes.statusCode, proxyRes.headers);
+          res.end(rawBody);
+          return;
+        }
+        try {
+          const modified = JSON.stringify(adaptor(JSON.parse(rawBody.toString('utf8'))));
+          res.writeHead(proxyRes.statusCode, {
+            ...proxyRes.headers,
+            'content-length': Buffer.byteLength(modified),
+          });
+          res.end(modified);
+        } catch (e) {
+          logger.error('Adaptor error:', e.message);
+          logger.error('Content-Encoding was:', proxyRes.headers['content-encoding']);
+          res.writeHead(proxyRes.statusCode, proxyRes.headers);
+          res.end(rawBody);
+        }
+      });
     },
     error: (err, req, res, target) => {
       logger.error("Proxy error:", err);
