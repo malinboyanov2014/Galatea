@@ -12,7 +12,7 @@ interface Conversation {
     preview: string;
 }
 
-const drawerContent = () => {
+const DrawerContent = () => {
     const conversations: Conversation[] = [
         { id: "1", name: "Alice", preview: "Hey, how are you?" },
         { id: "2", name: "Bob", preview: "Can we reschedule?" },
@@ -48,10 +48,12 @@ const drawerContent = () => {
 };
 
 export const Explore = () => {
+
+
     return (
         <View className="flex-1">
             <Header />
-            <Chat drawerContent={drawerContent()}>
+            <Chat drawerContent={<DrawerContent />}>
                 <Messages
                     messages={[
                         { id: "1", content: "Hi", sender: "user" },

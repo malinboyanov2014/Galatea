@@ -1,5 +1,5 @@
+import GText from '@/src/common/GText';
 import { createElement } from 'react';
-import { Text } from 'react-native';
 import { listAdapter } from './Adaptors/list';
 import { Adapter, FactoryInput, FactoryOutput, FactoryViewOptions } from './types';
 
@@ -14,8 +14,10 @@ export function createComponent(input: FactoryInput): FactoryOutput {
 	const adapter = adapters[type];
 
 	if (!adapter) {
-		console.error(`No adapter registered for component type "${type}".`);
-		const Fallback = () => createElement(Text, null, 'Please elaborate!');
+		if (type) {
+			console.error(`No adapter registered for component type "${type}".`);
+		}
+		const Fallback = () => createElement(GText, null, 'Please elaborate!');
 		return { Component: Fallback as any, props: {} };
 	}
 
