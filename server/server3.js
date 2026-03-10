@@ -158,6 +158,8 @@ const responseAdaptors = {
   reporting_bar_rcm_report: (data) => {
     if (data?.data?.[0]) {
       data.data[0].report_type = 'list';
+      data.data[0].report_name = 'History';
+      data.data[0].schema = "{\"fields\": [{\"name\": \"latest_title\", \"type\": \"string\", \"unit\": \"string\", \"description\": \"Field latest_title\"}]}";
     }
     return data;
   },
