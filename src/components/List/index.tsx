@@ -1,11 +1,13 @@
 import { useRef } from 'react';
-import { ActivityIndicator, FlatList, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { TableEmpty } from './TableEmpty';
 import { TableFooter } from './TableFooter';
 import { TableHeader } from './TableHeader';
+import { TableLoading } from './TableLoading';
 import { TableRow } from './TableRow';
 import type { TableListProps } from './types';
 
+export { TableLoading } from './TableLoading';
 export type { Column, TableListProps } from './types';
 
 export function TableList<T>({
@@ -49,14 +51,8 @@ export function TableList<T>({
 						isExpandable={isExpandable}
 					/>
 				) : null}
-				ListEmptyComponent={!isLoading ? <TableEmpty /> : null}
-				ListFooterComponent={
-					isLoading ? (
-						<View className="items-center p-4">
-							<ActivityIndicator />
-						</View>
-					) : null
-				}
+				ListEmptyComponent={!isLoading ? <TableEmpty /> : <></>}
+				ListFooterComponent={isLoading ? <TableLoading /> : null}
 				renderItem={({ item }) => (
 					<TableRow
 						item={item}

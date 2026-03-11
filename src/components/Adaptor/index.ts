@@ -1,7 +1,7 @@
 import GText from '@/src/common/GText';
 import { createElement } from 'react';
 import { listAdapter } from './Adaptors/list';
-import { Adapter, FactoryInput, FactoryOutput, FactoryViewOptions } from './types';
+import { Adapter, FactoryInput, FactoryOutput } from './types';
 
 const adapters: Record<string, Adapter> = Object.create(null);
 
@@ -10,7 +10,7 @@ export function registerAdapter(type: string, adapter: Adapter) {
 }
 
 export function createComponent(input: FactoryInput): FactoryOutput {
-	const { type, schema, data, meta, filter, view } = input;
+	const { type, schema, data, meta } = input;
 	const adapter = adapters[type];
 
 	if (!adapter) {
@@ -21,7 +21,7 @@ export function createComponent(input: FactoryInput): FactoryOutput {
 		return { Component: Fallback as any, props: {} };
 	}
 
-	return adapter(schema ?? {}, data ?? [], meta, filter, (view as FactoryViewOptions) ?? {});
+	return adapter(schema ?? {}, data ?? [], meta);
 }
 
 export default createComponent;

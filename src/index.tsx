@@ -13,7 +13,7 @@ import GSwitch from "./common/GSwitch";
 import GText from "./common/GText";
 import GTextInput from "./common/GTextInput";
 import Header from "./components/Header";
-import MatrixLoadingIndicator from "./components/MatrixLoadingIndicator";
+import MatrixLoadingProgressIndicator from "./components/MatrixLoadingProgressIndicator";
 
 export const Home = () => {
   const [switchValue, setSwitchValue] = useState(false);
@@ -132,7 +132,7 @@ export const Home = () => {
           </View>
         </GCard>
         <GCard className="m-1 p-4 flex-1 min-w-[30%]">
-          <MatrixLoadingIndicator height={100} />
+          <MatrixLoadingProgressIndicator height={100} />
         </GCard>
       </View>
     </GScrollView>

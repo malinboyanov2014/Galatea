@@ -10,17 +10,19 @@ const HANDLE_WIDTH = 16;
 
 interface DrawerPanelProps {
   width?: number;
+  defaultOpen?: boolean;
   children?: React.ReactNode;
 }
 
 export default function DrawerPanel({
   width = DRAWER_WIDTH,
+  defaultOpen = false,
   children,
 }: DrawerPanelProps) {
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
-  const animatedWidth = useRef(new Animated.Value(STRIP_WIDTH)).current;
-  const animatedOpacity = useRef(new Animated.Value(0)).current;
+  const [open, setOpen] = useState(defaultOpen);
+  const animatedWidth = useRef(new Animated.Value(defaultOpen ? width : STRIP_WIDTH)).current;
+  const animatedOpacity = useRef(new Animated.Value(defaultOpen ? 1 : 0)).current;
   const { drawerWidth, handlePointerDown, handlePointerMove, handlePointerUp } =
     useDrawerResize(width, animatedWidth);
 
@@ -49,8 +51,11 @@ export default function DrawerPanel({
           overflow: "hidden",
           backgroundColor: theme.colors.surface,
           elevation: 4,
-          // borderRightWidth: open ? 1 : 0,
-          // borderRightColor: theme.colors.outline,
+          borderRightWidth: open ? 1 : 0,
+          borderTopWidth: open ? 1 : 0,
+          borderRightColor: theme.colors.outline,
+          borderTopColor: theme.colors.outline,
+          borderTopRightRadius: 12,
         }}
       >
         <View style={{ width: drawerWidth }}>
@@ -101,7 +106,7 @@ export default function DrawerPanel({
               borderColor: theme.colors.outline,
             }}
           >
-            <GripVertical size={12} color={theme.colors.outline} />
+            <GripVertical size={12} color={theme.colors.outline} style={{ cursor: 'pointer' }} />
           </View>
         </Animated.View>
       )}

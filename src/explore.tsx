@@ -6,7 +6,7 @@ import Chat from "./components/Layout/Chat";
 import Messages from "./components/Messages";
 
 const DrawerContent = () => {
-    const { Component } = useComponent({
+    const { Component, props } = useComponent({
         i: 'reporting_bar_rcm_report',
         config: {
             data: 'report_data',
@@ -19,7 +19,7 @@ const DrawerContent = () => {
         }
     })
 
-    return <Component />;
+    return <Component {...props} />;
 };
 
 export const Explore = () => {

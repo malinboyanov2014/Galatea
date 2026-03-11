@@ -9,8 +9,6 @@ export interface FactoryInput {
 	schema?: unknown;
 	data?: AnyRecord | AnyRecord[] | { data: AnyRecord[]; count?: number } | null;
 	meta?: Record<string, any>;
-	filter?: (item: any) => boolean;
-	view?: AnyRecord;
 }
 
 export interface FactoryOutput {
@@ -28,8 +26,6 @@ export interface Adapter {
 		schema: unknown,
 		data: FactoryInput['data'],
 		meta?: FactoryInput['meta'],
-		filter?: FactoryInput['filter'],
-		view?: FactoryViewOptions,
 	): FactoryOutput;
 }
 

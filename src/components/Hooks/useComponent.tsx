@@ -2,6 +2,7 @@ import { useSearch } from '@/api/query';
 import { createComponent } from '../Adaptor';
 import { FactoryInput } from '../Adaptor/types';
 import { extractByConfig } from '../Adaptor/utils';
+import MatrixLoadingProgressIndicator from '../MatrixLoadingProgressIndicator';
 
 type WithComponentOpts = {
 	i: string;
@@ -9,8 +10,12 @@ type WithComponentOpts = {
 };
 
 export default function useComponent({ i, config }: WithComponentOpts) {
-	const search = useSearch({ i });
-	const extract = extractByConfig(search.data, config);
+	const query = useSearch({ i });
+	const extract = extractByConfig(query.data, config);
 	const { Component, props } = createComponent(extract as FactoryInput);
-	return { Component, props, ...search };
+	if (query.isPending) {
+		return { Component: MatrixLoadingProgressIndicator, props: { height: 100, style: { margin: 8 } }, query };
+	}
+
+	return { Component, props, query };
 }
