@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import GButton from "./common/GButton";
 import GCard from "./common/GCard";
@@ -21,6 +21,16 @@ export const Home = () => {
   const [radioValue, setRadioValue] = useState("option1");
   const [textInput, setGTextInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [progress, setProgress] = useState(0);
+  const progressRef = useRef(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      progressRef.current = progressRef.current >= 100 ? 0 : progressRef.current + 1;
+      setProgress(progressRef.current);
+    }, 50);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <GScrollView className="flex-1">
@@ -132,7 +142,7 @@ export const Home = () => {
           </View>
         </GCard>
         <GCard className="m-1 p-4 flex-1 min-w-[30%]">
-          <MatrixLoadingProgressIndicator height={100} />
+          <MatrixLoadingProgressIndicator progress={progress} height={100} />
         </GCard>
       </View>
     </GScrollView>

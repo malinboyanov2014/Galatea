@@ -1,6 +1,6 @@
 import { FlashList } from "@shopify/flash-list";
 import { memo } from "react";
-import { StyleProp, View, ViewStyle } from "react-native";
+import { ActivityIndicator, StyleProp, View, ViewStyle } from "react-native";
 import { useTheme } from "react-native-paper";
 import GText from "../../common/GText";
 
@@ -17,6 +17,7 @@ interface MessagesProps {
   direction?: "up" | "down";
   style?: StyleProp<ViewStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
+  isLoading?: boolean;
 }
 
 const stripHtml = (html: string) => html.replace(/<[^>]*>/g, "");
@@ -85,7 +86,25 @@ const MessageBubble = memo(({ message }: { message: Message }) => {
 
 MessageBubble.displayName = "MessageBubble";
 
-export default function Messages({ messages, direction = "up", style, contentContainerStyle }: MessagesProps) {
+const LoadingBubble = () => {
+  const theme = useTheme();
+  return (
+    <View style={{ flexDirection: "row", justifyContent: "flex-start", marginVertical: 4, paddingHorizontal: 12 }}>
+      <View style={{
+        backgroundColor: theme.colors.surfaceDisabled,
+        borderRadius: 12,
+        borderBottomLeftRadius: 2,
+        borderWidth: 1,
+        borderColor: theme.colors.outline,
+        padding: 10,
+      }}>
+        <ActivityIndicator size="small" color={theme.colors.onSurface} />
+      </View>
+    </View>
+  );
+};
+
+export default function Messages({ messages, direction = "up", style, contentContainerStyle, isLoading }: MessagesProps) {
   const isUp = direction === "up";
   const data = isUp ? messages : [...messages].reverse();
   if (isUp) {
@@ -105,6 +124,7 @@ export default function Messages({ messages, direction = "up", style, contentCon
           autoscrollToTopThreshold: !isUp ? 1 : undefined,
           animateAutoScrollToBottom: isUp,
         }}
+        ListFooterComponent={isLoading ? <LoadingBubble /> : null}
       />
     </View>
   );
