@@ -1,11 +1,10 @@
-import { createContext, useContext, useState } from "react";
-import React from "react";
+import React, { createContext, useContext, useState } from "react";
 import { Message } from "../../Messages";
 
 interface ChatState {
     searchQuery: string;
     messages: Message[];
-    submitSearch: (text: string) => void;
+    addUserMessage: (text: string) => void;
     addBotMessage: (text: string) => void;
 }
 
@@ -15,7 +14,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [messages, setMessages] = useState<Message[]>([]);
 
-    const submitSearch = (text: string) => {
+    const addUserMessage = (text: string) => {
         if (!text.trim()) return;
         setMessages(prev => [...prev, {
             id: Date.now().toString(),
@@ -34,7 +33,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     return (
-        <ChatContext.Provider value={{ searchQuery, messages, submitSearch, addBotMessage }}>
+        <ChatContext.Provider value={{ searchQuery, messages, addUserMessage, addBotMessage }}>
             {children}
         </ChatContext.Provider>
     );

@@ -1,6 +1,6 @@
 import { extractByConfig } from "@/src/components/Adaptor/utils";
 import { useEffect, useRef } from "react";
-import { useApi } from "."
+import { useApi } from ".";
 
 export const useSearch = ({ i }: { i: string }) => {
     return useApi({
@@ -13,18 +13,17 @@ export const useSearch = ({ i }: { i: string }) => {
     })
 }
 
-export const useProgressSearch = ({ i, q, config = {}, onMessage }: {
-    i: string;
-    q: string;
+export const useProgressSearch = ({ params, config = {}, onMessage }: {
+    params: Record<string, string>;
     config?: Record<string, string>;
     onMessage?: (text: string) => void;
 }) => {
     const query = useApi({
         method: 'POST',
         url: '/api/search/item',
-        params: { i, q },
+        params,
         body: { "context": JSON.stringify({ "user_id": "mboyanov@curativeai.com", "section": "schedule_tx" }) },
-        enabled: !!q
+        enabled: !!params.q
     })
 
     const processedDataRef = useRef<unknown>(null);

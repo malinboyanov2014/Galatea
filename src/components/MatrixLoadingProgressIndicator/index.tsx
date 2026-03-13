@@ -90,32 +90,41 @@ export default function MatrixLoadingProgressIndicator({ width: widthProp, heigh
 
     useEffect(() => {
         if (width === 0 || height === 0) return;
-        const interval = setInterval(() => {
-            setColumns(prev =>
-                prev.map((col, colIdx) => {
-                    // Frozen columns do not animate
-                    if (colIdx < frozenCols) return col;
+        const TICK_MS = 50;
+        let rafId: number;
+        let lastTime = 0;
 
-                    const nextTick = col.tick + 1;
-                    if (nextTick % col.speed !== 0) {
-                        return { ...col, tick: nextTick };
-                    }
-                    const newHead = col.head + 1;
-                    const newChars = col.chars.map((c, i) => {
-                        if (i <= newHead && i >= newHead - col.tail && Math.random() > 0.85) {
-                            return randomChar();
+        const tick = (time: number) => {
+            if (time - lastTime >= TICK_MS) {
+                lastTime = time;
+                setColumns(prev =>
+                    prev.map((col, colIdx) => {
+                        // Frozen columns do not animate
+                        if (colIdx < frozenCols) return col;
+
+                        const nextTick = col.tick + 1;
+                        if (nextTick % col.speed !== 0) {
+                            return { ...col, tick: nextTick };
                         }
-                        return c;
-                    });
-                    if (newHead - col.tail > numRows) {
-                        return { ...makeColumn(numRows), tick: 0 };
-                    }
-                    return { ...col, chars: newChars, head: newHead, tick: nextTick };
-                })
-            );
-        }, 50);
+                        const newHead = col.head + 1;
+                        const newChars = col.chars.map((c, i) => {
+                            if (i <= newHead && i >= newHead - col.tail && Math.random() > 0.85) {
+                                return randomChar();
+                            }
+                            return c;
+                        });
+                        if (newHead - col.tail > numRows) {
+                            return { ...makeColumn(numRows), tick: 0 };
+                        }
+                        return { ...col, chars: newChars, head: newHead, tick: nextTick };
+                    })
+                );
+            }
+            rafId = requestAnimationFrame(tick);
+        };
 
-        return () => clearInterval(interval);
+        rafId = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(rafId);
     }, [numRows, width, height, frozenCols]);
 
     const onLayout = (e: LayoutChangeEvent) => {

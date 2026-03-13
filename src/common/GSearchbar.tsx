@@ -7,33 +7,38 @@ export type GSearchbarBaseProps = React.ComponentProps<typeof Searchbar>;
 
 export interface GSearchbarProps extends GSearchbarBaseProps {
   className?: string;
+  disabled?: boolean;
 }
 
 type SearchbarRef = React.ComponentRef<typeof Searchbar>;
 
 const GSearchbar = forwardRef<SearchbarRef, GSearchbarProps>(
-  ({ className, style, ...rest }, ref) => {
+  ({ className, style, disabled, ...rest }, ref) => {
     const theme = useTheme();
-
     const borderRadius = theme.roundness * 6;
+
+    const gradientColors: [string, string, ...string[]] = disabled
+      ? [theme.colors.primary, theme.colors.secondary, theme.colors.primaryContainer]
+      : [theme.colors.primary, theme.colors.secondary];
 
     const searchbar = (
       <LinearGradient
-        colors={[theme.colors.primary, theme.colors.secondary]}
+        colors={gradientColors}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
-        style={{ borderRadius, padding: 2 }}
+        style={{ borderRadius, padding: disabled ? 0 : 2 }}
       >
         <Searchbar
           ref={ref}
           style={[
             {
-              backgroundColor: theme.colors.surface,
-              borderRadius: borderRadius - 2,
+              backgroundColor: disabled ? "transparent" : theme.colors.surface,
+              borderRadius: disabled ? borderRadius : borderRadius - 2,
             },
             style,
           ]}
           inputStyle={{ backgroundColor: "transparent" }}
+          disabled={disabled}
           {...rest}
         />
       </LinearGradient>

@@ -1,6 +1,6 @@
 import { GripVertical, Menu, X } from "lucide-react-native";
 import React, { useEffect, useRef, useState } from "react";
-import { Animated, Pressable, View } from "react-native";
+import { Animated, Pressable, ScrollView, View } from "react-native";
 import { Drawer, useTheme } from "react-native-paper";
 import { useDrawerResize } from "./hooks";
 
@@ -58,28 +58,34 @@ export default function DrawerPanel({
           borderTopRightRadius: 12,
         }}
       >
-        <View style={{ width: drawerWidth }}>
-          <Pressable
-            onPress={() => setOpen((v) => !v)}
-            style={{
-              width: STRIP_WIDTH,
-              height: STRIP_WIDTH,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {open
-              ? <X size={22} color={theme.colors.onSurface} />
-              : <Menu size={22} color={theme.colors.onSurface} />
-            }
-          </Pressable>
-
-          <Animated.View style={{ opacity: animatedOpacity }}>
-            {children ?? (
-              <Drawer.Item icon="inbox" label="Inbox" />
-            )}
-          </Animated.View>
-        </View>
+        <Pressable
+          onPress={() => setOpen((v) => !v)}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: STRIP_WIDTH,
+            height: STRIP_WIDTH,
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 10,
+            backgroundColor: theme.colors.surface,
+          }}
+        >
+          {open
+            ? <X size={22} color={theme.colors.onSurface} />
+            : <Menu size={22} color={theme.colors.onSurface} />
+          }
+        </Pressable>
+        <ScrollView>
+          <View style={{ width: drawerWidth, paddingTop: STRIP_WIDTH }}>
+            <Animated.View style={{ opacity: animatedOpacity }}>
+              {children ?? (
+                <Drawer.Item icon="inbox" label="Inbox" />
+              )}
+            </Animated.View>
+          </View>
+        </ScrollView>
       </Animated.View>
 
       {open && (
