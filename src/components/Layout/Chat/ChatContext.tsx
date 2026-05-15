@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { ComponentType, createContext, useContext, useState } from "react";
 import { Message } from "../../Messages";
 
 interface ChatState {
@@ -6,6 +6,7 @@ interface ChatState {
     messages: Message[];
     addUserMessage: (text: string) => void;
     addBotMessage: (text: string) => void;
+    addBotComponent: (factory: { Component: ComponentType<any>; props: any }) => void;
 }
 
 const ChatContext = createContext<ChatState | null>(null);
@@ -32,8 +33,16 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         }]);
     };
 
+    const addBotComponent = (factory: { Component: ComponentType<any>; props: any }) => {
+        setMessages(prev => [...prev, {
+            id: Date.now().toString(),
+            component: factory,
+            sender: 'bot',
+        }]);
+    };
+
     return (
-        <ChatContext.Provider value={{ searchQuery, messages, addUserMessage, addBotMessage }}>
+        <ChatContext.Provider value={{ searchQuery, messages, addUserMessage, addBotMessage, addBotComponent }}>
             {children}
         </ChatContext.Provider>
     );

@@ -1,6 +1,10 @@
-import { extractByConfig } from "@/src/components/Adaptor/utils";
+import { createComponent } from "@/src/components/Adaptor";
+import { FactoryOutput } from "@/src/components/Adaptor/types";
+import { deepParseJson } from "@/src/utils";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { useApi } from ".";
+import { axiosClient } from "./axiosCient";
 
 export const useSearch = ({ i }: { i: string }) => {
   return useApi({
@@ -18,18 +22,61 @@ export const useSearch = ({ i }: { i: string }) => {
   });
 };
 
+export const useProgress = ({
+  request_id,
+  onResult,
+}: {
+  request_id?: string;
+  onResult?: (factory: FactoryOutput) => void;
+}) => {
+  const processedRef = useRef<string | null>(null);
+
+  const query = useQuery({
+    queryKey: ["progress", request_id],
+    queryFn: async () => {
+      const { data } = await axiosClient.get(
+        `/api/search/progress/${request_id}`,
+      );
+      return data;
+    },
+    enabled: !!request_id,
+    select: (result) => deepParseJson(result?.data?.[0]),
+    refetchInterval: (q) => {
+      const status = (q.state.data as any)?.data?.[0]?.status;
+      return status === "completed" ? false : 2000;
+    },
+  });
+
+  useEffect(() => {
+    if (!query.data || (query.data as any).status !== "completed") return;
+    if (processedRef.current === request_id) return;
+    processedRef.current = request_id ?? null;
+    const results: Array<{ type: string; data: unknown }> =
+      (query.data as any).results ?? [];
+    results.forEach((result) => {
+      const factory = createComponent({
+        type: result.type,
+        data: result.data as any,
+      });
+      onResult?.(factory);
+    });
+  }, [query.data]);
+
+  const isRunning = (query.data as any)?.status === "running";
+
+  return { ...query, isFetching: query.isFetching || isRunning };
+};
+
 export const useProgressSearch = ({
   params,
-  config = {},
   body,
-  onMessage,
+  onResult,
 }: {
   params: Record<string, string>;
-  config?: Record<string, string>;
   body?: Record<string, string>;
-  onMessage?: (text: string) => void;
+  onResult?: (factory: FactoryOutput) => void;
 }) => {
-  const query = useApi({
+  const initial = useApi({
     method: "POST",
     url: "/api/search/item",
     params,
@@ -37,17 +84,12 @@ export const useProgressSearch = ({
     enabled: !!params.q,
   });
 
-  const processedDataRef = useRef<unknown>(null);
+  const request_id = (initial.data as any)?.request_id as string | undefined;
 
-  useEffect(() => {
-    if (!query.data || query.data === processedDataRef.current) return;
-    processedDataRef.current = query.data;
-    const extracted = extractByConfig(query.data, config);
-    const message = Object.values(extracted).find(
-      (v): v is string => typeof v === "string" && !!v,
-    );
-    if (message) onMessage?.(message);
-  }, [query.data]);
+  const progress = useProgress({ request_id, onResult });
 
-  return query;
+  return {
+    ...progress,
+    isFetching: initial.isFetching || progress.isFetching,
+  };
 };

@@ -1,5 +1,6 @@
 import { useProgressSearch } from "@/api/query";
 import GView from "@/src/common/GView";
+import { encryptForUrl } from "@/src/utils";
 import React, { memo, useState } from "react";
 import { View } from "react-native";
 import GSearchbar from "../../../common/GSearchbar";
@@ -7,7 +8,6 @@ import DrawerPanel, { STRIP_WIDTH } from "../../DrawerPanel";
 import MatrixLoadingProgressIndicator from "../../MatrixLoadingProgressIndicator";
 import Messages from "../../Messages";
 import { ChatProvider, useChatContext } from "./ChatContext";
-import { encryptForUrl } from "@/src/utils";
 
 const ChatBackground = memo(({ visible }: { visible: boolean }) => {
   if (!visible) return null;
@@ -42,7 +42,7 @@ function ChatInner({
   i = "",
   config = {},
 }: ChatProps) {
-  const { searchQuery, messages, addUserMessage, addBotMessage } =
+  const { searchQuery, messages, addUserMessage, addBotComponent } =
     useChatContext();
   const [inputText, setInputText] = useState("");
   const params = { i, q: searchQuery, appointment_type: "treatment" };
@@ -59,9 +59,8 @@ function ChatInner({
   };
   const { isFetching } = useProgressSearch({
     params,
-    config,
     body,
-    onMessage: addBotMessage,
+    onResult: addBotComponent,
   });
 
   const handleSubmit = () => {

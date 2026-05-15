@@ -1,30 +1,28 @@
-import GText from '@/src/common/GText';
-import { createElement } from 'react';
-import { listAdapter } from './Adaptors/list';
-import { Adapter, FactoryInput, FactoryOutput } from './types';
+import { listAdapter } from "./Adaptors/list";
+import { textAdapter } from "./Adaptors/text";
+import { Adapter, FactoryInput, FactoryOutput } from "./types";
 
 const adapters: Record<string, Adapter> = Object.create(null);
 
 export function registerAdapter(type: string, adapter: Adapter) {
-	adapters[type] = adapter;
+  adapters[type] = adapter;
 }
 
 export function createComponent(input: FactoryInput): FactoryOutput {
-	const { type, schema, data, meta } = input;
-	const adapter = adapters[type];
+  const { type, schema, data, meta } = input;
+  const adapter = adapters[type];
 
-	if (!adapter) {
-		if (type) {
-			console.error(`No adapter registered for component type "${type}".`);
-		}
-		const Fallback = () => createElement(GText, null, 'Please elaborate!');
-		return { Component: Fallback as any, props: {} };
-	}
+  if (!adapter) {
+    if (type) {
+      console.error(`No adapter registered for component type "${type}".`);
+    }
+    return { Component: () => null, props: {} };
+  }
 
-	return adapter(schema ?? {}, data ?? [], meta);
+  return adapter(schema ?? {}, data ?? [], meta);
 }
 
 export default createComponent;
 
-registerAdapter('list', listAdapter);
-
+registerAdapter("list", listAdapter);
+registerAdapter("text", textAdapter);

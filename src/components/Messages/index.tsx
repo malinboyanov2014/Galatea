@@ -1,13 +1,14 @@
 import { FlashList } from "@shopify/flash-list";
 import { memo } from "react";
-import { StyleProp, View, ViewStyle } from "react-native";
+import { ComponentType, StyleProp, View, ViewStyle } from "react-native";
 import { useTheme } from "react-native-paper";
 import GText from "../../common/GText";
 
 export interface Message {
   id: string;
-  content: string;
+  content?: string;
   contentType?: "text" | "html";
+  component?: { Component: ComponentType<any>; props: any };
   sender: "bot" | "user";
   date?: string;
 }
@@ -25,10 +26,19 @@ const MessageBubble = memo(({ message }: { message: Message }) => {
   const theme = useTheme();
   const isUser = message.sender === "user";
 
+  if (message.component) {
+    const { Component, props } = message.component;
+    return (
+      <View style={{ marginVertical: 4, paddingHorizontal: 12 }}>
+        <Component {...props} />
+      </View>
+    );
+  }
+
   const content =
     message.contentType === "html"
-      ? stripHtml(message.content)
-      : message.content;
+      ? stripHtml(message.content ?? "")
+      : (message.content ?? "");
 
   return (
     <View
