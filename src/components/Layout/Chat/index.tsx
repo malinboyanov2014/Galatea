@@ -7,15 +7,25 @@ import DrawerPanel, { STRIP_WIDTH } from "../../DrawerPanel";
 import MatrixLoadingProgressIndicator from "../../MatrixLoadingProgressIndicator";
 import Messages from "../../Messages";
 import { ChatProvider, useChatContext } from "./ChatContext";
+import { encryptForUrl } from "@/src/utils";
 
 const ChatBackground = memo(({ visible }: { visible: boolean }) => {
   if (!visible) return null;
   return (
     <MatrixLoadingProgressIndicator
-      style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.8 }}
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        opacity: 0.8,
+      }}
     />
   );
 });
+
+ChatBackground.displayName = "ChatBackground";
 
 interface ChatProps {
   children?: React.ReactNode;
@@ -25,15 +35,38 @@ interface ChatProps {
   config?: Record<string, string>;
 }
 
-function ChatInner({ children, searchPlaceholder = "Message...", drawerContent, i = '', config = {} }: ChatProps) {
-  const { searchQuery, messages, addUserMessage, addBotMessage } = useChatContext();
-  const [inputText, setInputText] = useState('');
-  const params = { i, q: searchQuery };
-  const { isFetching } = useProgressSearch({ params, config, onMessage: addBotMessage });
+function ChatInner({
+  children,
+  searchPlaceholder = "Message...",
+  drawerContent,
+  i = "",
+  config = {},
+}: ChatProps) {
+  const { searchQuery, messages, addUserMessage, addBotMessage } =
+    useChatContext();
+  const [inputText, setInputText] = useState("");
+  const params = { i, q: searchQuery, appointment_type: "treatment" };
+  const request_id =
+    i && searchQuery
+      ? encryptForUrl({ i, searchQuery, timestamp: Date.now() })
+      : undefined;
+  const body = {
+    context: JSON.stringify({
+      user_id: "mboyanov@curativeai.com",
+      section: "schedule_tx",
+      request_id,
+    }),
+  };
+  const { isFetching } = useProgressSearch({
+    params,
+    config,
+    body,
+    onMessage: addBotMessage,
+  });
 
   const handleSubmit = () => {
     addUserMessage(inputText);
-    setInputText('');
+    setInputText("");
   };
 
   return (

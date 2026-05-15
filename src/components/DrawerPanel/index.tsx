@@ -1,7 +1,8 @@
-import { GripVertical, Menu, X } from "lucide-react-native";
+import { GripVertical } from "lucide-react-native";
 import React, { useEffect, useRef, useState } from "react";
-import { Animated, Pressable, ScrollView, View } from "react-native";
+import { Animated, ScrollView, View } from "react-native";
 import { Drawer, useTheme } from "react-native-paper";
+import GIconButton from "../../common/GIconButton";
 import { useDrawerResize } from "./hooks";
 
 const DRAWER_WIDTH = 280;
@@ -58,7 +59,9 @@ export default function DrawerPanel({
           borderTopRightRadius: 12,
         }}
       >
-        <Pressable
+        <GIconButton
+          icon={open ? "close" : "menu"}
+          size={22}
           onPress={() => setOpen((v) => !v)}
           style={{
             position: "absolute",
@@ -66,17 +69,11 @@ export default function DrawerPanel({
             left: 0,
             width: STRIP_WIDTH,
             height: STRIP_WIDTH,
-            alignItems: "center",
-            justifyContent: "center",
             zIndex: 10,
             backgroundColor: theme.colors.surface,
+            margin: 0,
           }}
-        >
-          {open
-            ? <X size={22} color={theme.colors.onSurface} />
-            : <Menu size={22} color={theme.colors.onSurface} />
-          }
-        </Pressable>
+        />
         <ScrollView>
           <View style={{ width: drawerWidth, paddingTop: STRIP_WIDTH }}>
             <Animated.View style={{ opacity: animatedOpacity }}>

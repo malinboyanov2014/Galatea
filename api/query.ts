@@ -3,38 +3,51 @@ import { useEffect, useRef } from "react";
 import { useApi } from ".";
 
 export const useSearch = ({ i }: { i: string }) => {
-    return useApi({
-        method: 'POST',
-        url: '/api/search/item',
-        params: {
-            i
-        },
-        body: { "context": JSON.stringify({ "user_id": "mboyanov@curativeai.com", "section": "schedule_tx" }) }
-    })
-}
+  return useApi({
+    method: "POST",
+    url: "/api/search/item",
+    params: {
+      i,
+    },
+    body: {
+      context: JSON.stringify({
+        user_id: "mboyanov@curativeai.com",
+        section: "schedule_tx",
+      }),
+    },
+  });
+};
 
-export const useProgressSearch = ({ params, config = {}, onMessage }: {
-    params: Record<string, string>;
-    config?: Record<string, string>;
-    onMessage?: (text: string) => void;
+export const useProgressSearch = ({
+  params,
+  config = {},
+  body,
+  onMessage,
+}: {
+  params: Record<string, string>;
+  config?: Record<string, string>;
+  body?: Record<string, string>;
+  onMessage?: (text: string) => void;
 }) => {
-    const query = useApi({
-        method: 'POST',
-        url: '/api/search/item',
-        params,
-        body: { "context": JSON.stringify({ "user_id": "mboyanov@curativeai.com", "section": "schedule_tx" }) },
-        enabled: !!params.q
-    })
+  const query = useApi({
+    method: "POST",
+    url: "/api/search/item",
+    params,
+    body,
+    enabled: !!params.q,
+  });
 
-    const processedDataRef = useRef<unknown>(null);
+  const processedDataRef = useRef<unknown>(null);
 
-    useEffect(() => {
-        if (!query.data || query.data === processedDataRef.current) return;
-        processedDataRef.current = query.data;
-        const extracted = extractByConfig(query.data, config);
-        const message = Object.values(extracted).find((v): v is string => typeof v === 'string' && !!v);
-        if (message) onMessage?.(message);
-    }, [query.data]);
+  useEffect(() => {
+    if (!query.data || query.data === processedDataRef.current) return;
+    processedDataRef.current = query.data;
+    const extracted = extractByConfig(query.data, config);
+    const message = Object.values(extracted).find(
+      (v): v is string => typeof v === "string" && !!v,
+    );
+    if (message) onMessage?.(message);
+  }, [query.data]);
 
-    return query;
-}
+  return query;
+};
