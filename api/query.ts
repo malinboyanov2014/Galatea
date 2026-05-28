@@ -31,7 +31,7 @@ export const useProgress = ({
 }) => {
   const processedRef = useRef<string | null>(null);
 
-  const query = useQuery({
+  const query = useQuery<any>({
     queryKey: ["progress", request_id],
     queryFn: async () => {
       const { data } = await axiosClient.get(
@@ -48,18 +48,23 @@ export const useProgress = ({
   });
 
   useEffect(() => {
-    if (!query.data || (query.data as any).status !== "completed") return;
-    if (processedRef.current === request_id) return;
+    if (!query.data || query.data.status !== "completed") {
+      return;
+    }
+    if (processedRef.current === request_id) {
+      return;
+    }
     processedRef.current = request_id ?? null;
-    const results: Array<{ type: string; data: unknown }> =
-      (query.data as any).results ?? [];
+    const results: any[] = query.data.results ?? [];
     results.forEach((result) => {
       const factory = createComponent({
         type: result.type,
         data: result.data as any,
+        meta: { height: 500 },
       });
       onResult?.(factory);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query.data]);
 
   const isRunning = (query.data as any)?.status === "running";

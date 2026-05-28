@@ -1,10 +1,10 @@
-import { View } from 'react-native';
-import MatrixLoadingProgressIndicator from '../MatrixLoadingProgressIndicator';
+import MatrixLoadingProgressIndicator from "../MatrixLoadingProgressIndicator";
+import GView from "@/src/common/GView";
 
 export function TableLoading() {
-	return (
-		<View>
-			<MatrixLoadingProgressIndicator height={41} />
-		</View>
-	);
+  return (
+    <GView>
+      <MatrixLoadingProgressIndicator height={41} />
+    </GView>
+  );
 }

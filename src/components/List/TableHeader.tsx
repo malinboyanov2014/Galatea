@@ -1,4 +1,5 @@
 import GText from '@/src/common/GText';
+import GView from '@/src/common/GView';
 import type { ReactNode } from 'react';
 import type { DimensionValue } from 'react-native';
 import { View } from 'react-native';
@@ -20,7 +21,7 @@ export function TableHeader<T>({
 	isExpandable,
 }: TableHeaderProps<T>) {
 	return (
-		<View className='z-10 flex-row p-3'>
+		<GView className='z-10 flex-row p-3'>
 			{columns.map((col, idx) => (
 				<View
 					key={String(col.id ?? col.key ?? idx)}
@@ -43,6 +44,6 @@ export function TableHeader<T>({
 				</View>
 			) : null}
 			{isExpandable && <View className="ml-3 w-[18]" />}
-		</View>
+		</GView>
 	);
 }

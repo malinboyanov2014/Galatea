@@ -65,9 +65,7 @@ const MessageBubble = memo(({ message }: { message: Message }) => {
       >
         <GText
           style={{
-            color: isUser
-              ? theme.colors.onPrimary
-              : theme.colors.onSurface,
+            color: isUser ? theme.colors.onPrimary : theme.colors.onSurface,
           }}
         >
           {content}
@@ -77,9 +75,7 @@ const MessageBubble = memo(({ message }: { message: Message }) => {
           <GText
             style={{
               fontSize: 10,
-              color: isUser
-                ? theme.colors.onPrimary
-                : theme.colors.onSurface,
+              color: isUser ? theme.colors.onPrimary : theme.colors.onSurface,
               opacity: 0.7,
               marginTop: 4,
               textAlign: isUser ? "right" : "left",
@@ -95,7 +91,12 @@ const MessageBubble = memo(({ message }: { message: Message }) => {
 
 MessageBubble.displayName = "MessageBubble";
 
-export default function Messages({ messages, direction = "up", style, contentContainerStyle }: MessagesProps) {
+export default function Messages({
+  messages,
+  direction = "up",
+  style,
+  contentContainerStyle,
+}: MessagesProps) {
   const isUp = direction === "up";
   const data = isUp ? messages : [...messages].reverse();
 

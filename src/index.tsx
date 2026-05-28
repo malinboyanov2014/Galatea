@@ -12,8 +12,21 @@ import GSearchbar from "./common/GSearchbar";
 import GSwitch from "./common/GSwitch";
 import GText from "./common/GText";
 import GTextInput from "./common/GTextInput";
+import createComponent from "./components/Adaptor";
 import Header from "./components/Header";
 import MatrixLoadingProgressIndicator from "./components/MatrixLoadingProgressIndicator";
+
+const tableSample = [
+  { first_name: "Ada", last_name: "Lovelace", role: "engineer" },
+  { first_name: "Alan", last_name: "Turing", role: "mathematician" },
+  { first_name: "Grace", last_name: "Hopper", role: "admiral" },
+];
+
+const { Component: SampleTable } = createComponent({
+  type: "list",
+  data: tableSample,
+  meta: { height: 180 },
+});
 
 export const Home = () => {
   const [switchValue, setSwitchValue] = useState(false);
@@ -26,7 +39,8 @@ export const Home = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      progressRef.current = progressRef.current >= 100 ? 0 : progressRef.current + 1;
+      progressRef.current =
+        progressRef.current >= 100 ? 0 : progressRef.current + 1;
       setProgress(progressRef.current);
     }, 50);
     return () => clearInterval(interval);
@@ -94,9 +108,7 @@ export const Home = () => {
             onValueChange={setSwitchValue}
             label="Turn it ON"
           />
-          <GText className="mt-2">
-            Switch is {switchValue ? "ON" : "OFF"}
-          </GText>
+          <GText className="mt-2">Switch is {switchValue ? "ON" : "OFF"}</GText>
         </GCard>
 
         <GCard className="m-1 p-4 flex-1 min-w-[30%]">
@@ -129,9 +141,7 @@ export const Home = () => {
         </GCard>
 
         <GCard className="m-1 p-4 flex-1 min-w-[30%]">
-          <GText className="text-lg font-bold mb-2">
-            GIconButton & GIcon
-          </GText>
+          <GText className="text-lg font-bold mb-2">GIconButton & GIcon</GText>
           <View className="flex-row">
             <GIconButton
               icon="camera"
@@ -143,6 +153,11 @@ export const Home = () => {
         </GCard>
         <GCard className="m-1 p-4 flex-1 min-w-[30%]">
           <MatrixLoadingProgressIndicator progress={progress} height={100} />
+        </GCard>
+
+        <GCard className="m-1 p-4 flex-1 min-w-[30%]">
+          <GText className="text-lg font-bold mb-2">List Adapter</GText>
+          <SampleTable showHeader stickyHeader />
         </GCard>
       </View>
     </GScrollView>

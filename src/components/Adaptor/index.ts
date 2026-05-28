@@ -25,4 +25,5 @@ export function createComponent(input: FactoryInput): FactoryOutput {
 export default createComponent;
 
 registerAdapter("list", listAdapter);
+registerAdapter("table", listAdapter);
 registerAdapter("text", textAdapter);

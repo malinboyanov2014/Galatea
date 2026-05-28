@@ -1,5 +1,6 @@
+import GView from '@/src/common/GView';
 import { useRef } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList } from 'react-native';
 import { TableEmpty } from './TableEmpty';
 import { TableFooter } from './TableFooter';
 import { TableHeader } from './TableHeader';
@@ -28,14 +29,19 @@ export function TableList<T>({
 	const canLoadMore = data.length > 0;
 
 	return (
-		<View style={[{ flex: 1 }, style]} className="relative">
+		<GView style={[{ flex: 1 }, style]} className="relative">
 			<FlatList
 				ref={listRef}
 				data={data}
 				keyExtractor={(_, i) => i.toString()}
 				style={{ flex: 1 }}
 				contentContainerStyle={{ paddingHorizontal: 8, paddingBottom: showFooter ? 32 : 8 }}
-				stickyHeaderIndices={stickyHeader ? [0] : undefined}
+				stickyHeaderIndices={stickyHeader && showHeader ? [0] : undefined}
+				removeClippedSubviews={false}
+				initialNumToRender={Math.max(data.length, 10)}
+				maxToRenderPerBatch={Math.max(data.length, 10)}
+				windowSize={21}
+				nestedScrollEnabled
 				onEndReachedThreshold={0.5}
 				onEndReached={() => {
 					if (!isLoading && canLoadMore) {
@@ -65,6 +71,6 @@ export function TableList<T>({
 			{showFooter && stickyHeader ? (
 				<TableFooter onScrollToTop={() => listRef.current?.scrollToOffset({ offset: 0, animated: true })} />
 			) : null}
-		</View>
+		</GView>
 	);
 }
