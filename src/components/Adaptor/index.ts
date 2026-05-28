@@ -1,4 +1,5 @@
 import { listAdapter } from "./Adaptors/list";
+import { tableAdapter } from "./Adaptors/table";
 import { textAdapter } from "./Adaptors/text";
 import { Adapter, FactoryInput, FactoryOutput } from "./types";
 
@@ -25,5 +26,5 @@ export function createComponent(input: FactoryInput): FactoryOutput {
 export default createComponent;
 
 registerAdapter("list", listAdapter);
-registerAdapter("table", listAdapter);
+registerAdapter("table", tableAdapter);
 registerAdapter("text", textAdapter);

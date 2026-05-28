@@ -47,9 +47,7 @@ function ChatInner({
   const [inputText, setInputText] = useState("");
   const params = { i, q: searchQuery, appointment_type: "treatment" };
   const request_id =
-    i && searchQuery
-      ? encryptForUrl({ i, searchQuery, timestamp: Date.now() })
-      : undefined;
+    i && searchQuery ? encryptForUrl({ i, searchQuery }) : undefined;
   const body = {
     context: JSON.stringify({
       user_id: "mboyanov@curativeai.com",
