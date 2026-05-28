@@ -49,11 +49,12 @@ export const tableAdapter: Adapter = (
       ),
     }));
 
+    const isLarge = rows.length > 5;
     return (
-      <GView className="flex-1">
+      <GView style={isLarge ? { height: meta?.height } : { flex: 1 }}>
         <TableList
           showHeader
-          // stickyHeader
+          stickyHeader={isLarge}
           columns={columns}
           data={rows}
           styles={{
