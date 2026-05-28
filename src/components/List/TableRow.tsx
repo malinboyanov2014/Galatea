@@ -1,6 +1,6 @@
 import GText from "@/src/common/GText";
 import type { ReactNode } from "react";
-import type { DimensionValue } from "react-native";
+import type { DimensionValue, StyleProp, ViewStyle } from "react-native";
 import { View } from "react-native";
 import type { Column } from "./types";
 import GView from "@/src/common/GView";
@@ -13,7 +13,12 @@ interface TableRowProps<T> {
   columns: Column<T>[];
   actions?: (row: T) => ReactNode;
   actionsWidth?: DimensionValue;
-  styles?: { item?: string; row?: string };
+  styles?: {
+    item?: string;
+    row?: string;
+    itemStyle?: StyleProp<ViewStyle>;
+    rowStyle?: StyleProp<ViewStyle>;
+  };
   itemClassName?: (index: number, total: number) => string;
 }
 
@@ -34,9 +39,11 @@ export function TableRow<T>({
         styles?.item,
         itemClassName?.(index, size),
       )}
+      style={styles?.itemStyle}
     >
       <View
         className={cn("flex-row overflow-hidden rounded-md p-3", styles?.row)}
+        style={styles?.rowStyle}
       >
         {columns.map((col, idx) => {
           const value = col.accessor
@@ -52,7 +59,7 @@ export function TableRow<T>({
                 col.className,
                 col.bodyClassName,
               )}
-              style={{ flex: col.flex ?? 1 }}
+              style={[{ flex: col.flex ?? 1 }, col.bodyStyle]}
             >
               {col.render ? (
                 col.render(value, item)

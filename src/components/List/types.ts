@@ -10,6 +10,7 @@ export interface Column<T> {
   render?: (value: any, row: T) => ReactNode;
   className?: string;
   bodyClassName?: string;
+  bodyStyle?: StyleProp<ViewStyle>;
 }
 
 export interface TableListProps<T> {
@@ -32,6 +33,8 @@ export interface TableListProps<T> {
     item?: string;
     row?: string;
     footer?: string;
+    itemStyle?: StyleProp<ViewStyle>;
+    rowStyle?: StyleProp<ViewStyle>;
   };
   itemClassName?: (index: number, total: number) => string;
 }

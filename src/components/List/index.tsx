@@ -75,7 +75,12 @@ export function TableList<T>({
             columns={columns}
             actions={actions}
             actionsWidth={actionsWidth}
-            styles={{ item: styles?.item, row: styles?.row }}
+            styles={{
+              item: styles?.item,
+              row: styles?.row,
+              itemStyle: styles?.itemStyle,
+              rowStyle: styles?.rowStyle,
+            }}
             itemClassName={itemClassName}
           />
         )}

@@ -37,16 +37,17 @@ export const tableAdapter: Adapter = (
     props: Partial<React.ComponentProps<typeof TableList>>,
   ) => {
     const { colors } = useTheme();
-    const borderColor = `border-[${colors.outline}]`;
 
     const columns: any = resolvedSchema.fields.map((field, index) => ({
       key: field.name,
       title: formatTitle(field.name),
       flex: 1,
       className: "px-1 py-2",
-      bodyClassName: cn(
-        index < resolvedSchema.fields.length - 1 && `border-r ${borderColor}`,
-      ),
+      bodyClassName: cn(index < resolvedSchema.fields.length - 1 && "border-r"),
+      bodyStyle:
+        index < resolvedSchema.fields.length - 1
+          ? { borderRightColor: colors.outline }
+          : undefined,
     }));
 
     const isLarge = rows.length > 5;
@@ -59,14 +60,13 @@ export const tableAdapter: Adapter = (
           data={rows}
           styles={{
             header: "m-0 p-0 bg-transparent",
-            item: cn(
-              "m-0 p-0 rounded-none bg-transparent shadow-none border-t",
-              borderColor,
-            ),
-            row: cn("m-0 p-0 rounded-none border-l border-r", borderColor),
+            item: "m-0 p-0 rounded-none bg-transparent shadow-none border-t",
+            itemStyle: { borderColor: colors.outline },
+            row: "m-0 p-0 rounded-none border-l border-r",
+            rowStyle: { borderColor: colors.outline },
           }}
           itemClassName={(index, total) =>
-            index === total - 1 ? cn("border-b", borderColor) : ""
+            index === total - 1 ? "border-b" : ""
           }
           {...props}
         />
