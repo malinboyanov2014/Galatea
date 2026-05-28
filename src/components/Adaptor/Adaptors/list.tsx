@@ -1,3 +1,4 @@
+import { cn } from "@/src/utils";
 import { TableList } from "../../List";
 import type { Adapter, FactoryOutput, TableSchema } from "../types";
 import GView from "@/src/common/GView";
@@ -18,16 +19,24 @@ const inferSchema = (data: unknown): TableSchema => {
   };
 };
 
-export const listAdapter: Adapter = (schema, data, meta): FactoryOutput => {
+export const listAdapter: Adapter = (
+  schema: TableSchema | undefined,
+  data,
+  meta,
+): FactoryOutput => {
   const rows = (data as any[]) ?? [];
-  const resolvedSchema = (schema as TableSchema | undefined)?.fields?.length
-    ? (schema as TableSchema)
-    : inferSchema(rows);
+  const resolvedSchema = schema?.fields?.length ? schema : inferSchema(rows);
 
-  const columns: any = resolvedSchema.fields.map((field) => ({
+  const columns: any = resolvedSchema.fields.map((field, index) => ({
     key: field.name,
     title: formatTitle(field.name),
     flex: 1,
+    className: "px-1 py-2",
+    bodyClassName: cn(
+      index < resolvedSchema.fields.length - 1
+        ? "border-r border-zinc-200"
+        : "",
+    ),
   }));
 
   const Component = (
@@ -40,6 +49,14 @@ export const listAdapter: Adapter = (schema, data, meta): FactoryOutput => {
           stickyHeader
           columns={columns}
           data={rows}
+          styles={{
+            header: "m-0 p-0 bg-transparent",
+            item: "m-0 p-0 rounded-none bg-transparent shadow-none border-t border-zinc-200",
+            row: "m-0 p-0 rounded-none border-l border-r border-zinc-200",
+          }}
+          itemClassName={(index, total) =>
+            index === total - 1 ? "border-b border-zinc-200" : ""
+          }
           {...props}
         />
       </GView>

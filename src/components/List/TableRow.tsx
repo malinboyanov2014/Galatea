@@ -4,23 +4,40 @@ import type { DimensionValue } from "react-native";
 import { View } from "react-native";
 import type { Column } from "./types";
 import GView from "@/src/common/GView";
+import { cn } from "@/src/utils";
 
 interface TableRowProps<T> {
   item: T;
+  index: number;
+  size: number;
   columns: Column<T>[];
   actions?: (row: T) => ReactNode;
   actionsWidth?: DimensionValue;
+  styles?: { item?: string; row?: string };
+  itemClassName?: (index: number, total: number) => string;
 }
 
 export function TableRow<T>({
   item,
+  index,
+  size,
   columns,
   actions,
   actionsWidth,
+  styles,
+  itemClassName,
 }: TableRowProps<T>) {
   return (
-    <GView className="my-1 rounded-md shadow-sm">
-      <View className="flex-row overflow-hidden rounded-md p-3">
+    <GView
+      className={cn(
+        "my-1 rounded-md shadow-sm",
+        styles?.item,
+        itemClassName?.(index, size),
+      )}
+    >
+      <View
+        className={cn("flex-row overflow-hidden rounded-md p-3", styles?.row)}
+      >
         {columns.map((col, idx) => {
           const value = col.accessor
             ? col.accessor(item)
@@ -30,7 +47,11 @@ export function TableRow<T>({
           return (
             <View
               key={String(col.id ?? col.key ?? idx)}
-              className="min-w-0 overflow-hidden"
+              className={cn(
+                "min-w-0 overflow-hidden",
+                col.className,
+                col.bodyClassName,
+              )}
               style={{ flex: col.flex ?? 1 }}
             >
               {col.render ? (

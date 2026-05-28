@@ -1,4 +1,7 @@
 import CryptoJS from "crypto-js";
+import type { ClassValue } from "clsx";
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function deepParseJson<T = unknown>(value: unknown): T {
   if (typeof value === "string") {
@@ -42,4 +45,8 @@ export function encryptForUrl(obj: any) {
   const json = JSON.stringify(obj);
   const encrypted = CryptoJS.AES.encrypt(json, secret).toString();
   return toBase64Url(encrypted);
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }
