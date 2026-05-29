@@ -68,8 +68,9 @@ export const useProgress = ({
   }, [query.data]);
 
   const isRunning = (query.data as any)?.status === "running";
+  const progress = (query.data as any)?.progress_percent as number | undefined;
 
-  return { ...query, isFetching: query.isFetching || isRunning };
+  return { ...query, isFetching: query.isFetching || isRunning, progress };
 };
 
 export const useProgressSearch = ({
@@ -91,10 +92,10 @@ export const useProgressSearch = ({
 
   const request_id = (initial.data as any)?.request_id as string | undefined;
 
-  const progress = useProgress({ request_id, onResult });
+  const progressQuery = useProgress({ request_id, onResult });
 
   return {
-    ...progress,
-    isFetching: initial.isFetching || progress.isFetching,
+    ...progressQuery,
+    isFetching: initial.isFetching || progressQuery.isFetching,
   };
 };

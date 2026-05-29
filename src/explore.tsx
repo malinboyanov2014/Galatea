@@ -25,9 +25,8 @@ export const Explore = () => {
     <View className="flex-1">
       <Header />
       <Chat
-        drawerContent={<DrawerContent />}
+        // drawerContent={<DrawerContent />}
         i="v2_rcm_report"
-        config={{ message: "message" }}
       />
     </View>
   );

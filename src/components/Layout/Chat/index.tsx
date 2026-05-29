@@ -9,21 +9,24 @@ import MatrixLoadingProgressIndicator from "../../MatrixLoadingProgressIndicator
 import Messages from "../../Messages";
 import { ChatProvider, useChatContext } from "./ChatContext";
 
-const ChatBackground = memo(({ visible }: { visible: boolean }) => {
-  if (!visible) return null;
-  return (
-    <MatrixLoadingProgressIndicator
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        opacity: 0.8,
-      }}
-    />
-  );
-});
+const ChatBackground = memo(
+  ({ visible, progress }: { visible: boolean; progress?: number }) => {
+    if (!visible) return null;
+    return (
+      <MatrixLoadingProgressIndicator
+        progress={progress}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          opacity: 0.8,
+        }}
+      />
+    );
+  },
+);
 
 ChatBackground.displayName = "ChatBackground";
 
@@ -40,12 +43,12 @@ function ChatInner({
   searchPlaceholder = "Message...",
   drawerContent,
   i = "",
-  config = {},
 }: ChatProps) {
   const { searchQuery, messages, addUserMessage, addBotComponent } =
     useChatContext();
   const [inputText, setInputText] = useState("");
-  const params = { i, q: searchQuery, appointment_type: "treatment" };
+
+  const params = { i, q: searchQuery };
   const request_id =
     i && searchQuery ? encryptForUrl({ i, searchQuery }) : undefined;
   const body = {
@@ -55,7 +58,7 @@ function ChatInner({
       request_id,
     }),
   };
-  const { isFetching } = useProgressSearch({
+  const { isFetching, progress } = useProgressSearch({
     params,
     body,
     onResult: addBotComponent,
@@ -68,14 +71,20 @@ function ChatInner({
 
   return (
     <GView style={{ flex: 1, flexDirection: "row" }}>
-      <DrawerPanel>{drawerContent}</DrawerPanel>
+      {drawerContent && <DrawerPanel>{drawerContent}</DrawerPanel>}
       <View style={{ flex: 1 }}>
-        <ChatBackground visible={isFetching} />
+        <ChatBackground visible={isFetching} progress={progress} />
         <View style={{ flex: 1 }}>
-          <Messages messages={messages} style={{ marginRight: STRIP_WIDTH }} />
+          <Messages
+            messages={messages}
+            style={{ marginRight: drawerContent ? STRIP_WIDTH : 0 }}
+          />
           {children}
         </View>
-        <GView className="px-2 pb-2 pt-1" style={{ marginRight: STRIP_WIDTH }}>
+        <GView
+          className="px-2 pb-2 pt-1"
+          style={{ marginRight: drawerContent ? STRIP_WIDTH : 0 }}
+        >
           <GSearchbar
             placeholder={searchPlaceholder}
             value={inputText}
